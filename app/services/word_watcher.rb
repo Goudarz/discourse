@@ -7,7 +7,9 @@ class WordWatcher
   end
 
   def self.words_for_action(action, first_post_only: false)
-    words = WatchedWord.where(action: WatchedWord.actions[action.to_sym]).where(first_post_only: first_post_only).limit(1000)
+    words = WatchedWord.where(action: WatchedWord.actions[action.to_sym])
+    words = words.where(first_post_only: true) if first_post_only
+    words = words.limit(1000)
     if action.to_sym == :replace || action.to_sym == :tag
       words.pluck(:word, :replacement).to_h
     else
